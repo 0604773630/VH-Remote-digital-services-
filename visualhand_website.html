@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visual Hand (Pty) Ltd — Remote Digital Services</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #050810;
+    --dark: #0a0f1e;
+    --darker: #060b18;
+    --blue-900: #0a1628;
+    --blue-800: #0d1f3c;
+    --blue-600: #0f3460;
+    --blue-500: #1a4d8f;
+    --blue-400: #2166c4;
+    --blue-300: #3b82f6;
+    --blue-200: #60a5fa;
+    --blue-100: #93c5fd;
+    --blue-glow: #1e90ff;
+    --cyan: #00d4ff;
+    --white: #ffffff;
+    --gray-100: #e2e8f0;
+    --gray-300: #94a3b8;
+    --gray-500: #475569;
+    --display: 'Orbitron', monospace;
+    --body: 'Exo 2', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--body);
+    background: var(--black);
+    color: var(--white);
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* CIRCUIT BACKGROUND */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(30,144,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(30,144,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 60px;
+    background: rgba(5,8,16,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(30,144,255,0.15);
+  }
+  .nav-logo {
+    font-family: var(--display);
+    font-size: 14px; font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--white);
+  }
+  .nav-logo span { color: var(--blue-glow); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    font-size: 12px; font-weight: 500;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--gray-300);
+    text-decoration: none;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--cyan); }
+  .nav-cta {
+    background: transparent;
+    border: 1px solid var(--blue-glow);
+    color: var(--blue-glow);
+    font-family: var(--body);
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 10px 22px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background .2s, color .2s;
+  }
+  .nav-cta:hover { background: var(--blue-glow); color: var(--black); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: flex-start;
+    padding: 120px 60px 80px;
+    position: relative; z-index: 1;
+    overflow: hidden;
+  }
+  .hero-orb {
+    position: absolute;
+    top: 50%; right: 0;
+    transform: translateY(-50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(30,144,255,0.12) 0%, rgba(30,144,255,0.04) 40%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .hero-orb-2 {
+    position: absolute;
+    bottom: -100px; left: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(30,144,255,0.1);
+    border: 1px solid rgba(30,144,255,0.3);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 28px;
+    animation: fadeUp .8s ease both;
+  }
+  .badge-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--cyan);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+  .hero h1 {
+    font-family: var(--display);
+    font-size: clamp(36px, 6vw, 72px);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -1px;
+    margin-bottom: 24px;
+    max-width: 700px;
+    animation: fadeUp .8s .1s ease both;
+  }
+  .hero h1 .line2 { color: var(--blue-glow); }
+
+  .hero-sub {
+    font-size: 16px; font-weight: 300;
+    color: var(--gray-300);
+    max-width: 520px; line-height: 1.8;
+    margin-bottom: 40px;
+    animation: fadeUp .8s .2s ease both;
+  }
+
+  .hero-btns {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    animation: fadeUp .8s .3s ease both;
+  }
+  .btn-primary {
+    background: var(--blue-glow);
+    color: var(--black);
+    border: none;
+    font-family: var(--body);
+    font-size: 13px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 14px 32px; border-radius: 4px;
+    cursor: pointer; text-decoration: none;
+    transition: box-shadow .2s, transform .2s;
+  }
+  .btn-primary:hover {
+    box-shadow: 0 0 30px rgba(30,144,255,0.5);
+    transform: translateY(-2px);
+  }
+  .btn-outline {
+    background: transparent;
+    color: var(--white);
+    border: 1px solid rgba(255,255,255,0.2);
+    font-family: var(--body);
+    font-size: 13px; font-weight: 500;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 14px 32px; border-radius: 4px;
+    cursor: pointer; text-decoration: none;
+    transition: border-color .2s, color .2s;
+  }
+  .btn-outline:hover { border-color: var(--cyan); color: var(--cyan); }
+
+  .hero-stats {
+    display: flex; gap: 48px;
+    margin-top: 64px; padding-top: 40px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    animation: fadeUp .8s .4s ease both;
+  }
+  .hero-stat-val {
+    font-family: var(--display);
+    font-size: 28px; font-weight: 700;
+    color: var(--blue-glow);
+  }
+  .hero-stat-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-500); margin-top: 4px; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SECTIONS */
+  section { padding: 100px 60px; position: relative; z-index: 1; }
+  .section-label {
+    font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--cyan); font-weight: 600; margin-bottom: 12px;
+  }
+  .section-title {
+    font-family: var(--display);
+    font-size: clamp(24px, 3.5vw, 40px);
+    font-weight: 700; line-height: 1.2;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+  }
+  .section-body {
+    font-size: 15px; color: var(--gray-300);
+    max-width: 600px; line-height: 1.8; margin-bottom: 60px;
+  }
+
+  /* SERVICES */
+  #services { background: var(--darker); }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2px;
+    background: rgba(30,144,255,0.08);
+    border: 1px solid rgba(30,144,255,0.1);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .service-card {
+    background: var(--darker);
+    padding: 36px 32px;
+    transition: background .2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--blue-glow), transparent);
+    opacity: 0;
+    transition: opacity .3s;
+  }
+  .service-card:hover { background: rgba(30,144,255,0.05); }
+  .service-card:hover::before { opacity: 1; }
+
+  .service-icon {
+    width: 48px; height: 48px;
+    border-radius: 8px;
+    background: rgba(30,144,255,0.1);
+    border: 1px solid rgba(30,144,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+  .service-card h3 {
+    font-family: var(--display);
+    font-size: 14px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 12px;
+  }
+  .service-card p { font-size: 14px; color: var(--gray-300); line-height: 1.7; margin-bottom: 16px; }
+  .service-price {
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 1px; text-transform: uppercase;
+    color: var(--blue-glow);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .service-price::before { content: ''; width: 20px; height: 1px; background: var(--blue-glow); }
+
+  /* AI SERVICES HIGHLIGHT */
+  .ai-banner {
+    background: linear-gradient(135deg, rgba(30,144,255,0.12), rgba(0,212,255,0.06));
+    border: 1px solid rgba(30,144,255,0.25);
+    border-radius: 12px;
+    padding: 40px;
+    margin-bottom: 40px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 32px;
+    align-items: center;
+  }
+  .ai-badge {
+    background: var(--blue-glow);
+    color: var(--black);
+    font-family: var(--display);
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 2px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .ai-banner h3 { font-family: var(--display); font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+  .ai-banner p { font-size: 14px; color: var(--gray-300); line-height: 1.7; }
+
+  /* CIPC SECTION */
+  #cipc { background: var(--black); }
+  .cipc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+  .cipc-steps { display: flex; flex-direction: column; gap: 0; }
+  .cipc-step {
+    display: grid; grid-template-columns: 40px 1fr;
+    gap: 20px; padding-bottom: 32px;
+    position: relative;
+  }
+  .cipc-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 19px; top: 40px; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, rgba(30,144,255,0.4), rgba(30,144,255,0.05));
+  }
+  .step-num {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: rgba(30,144,255,0.1);
+    border: 1px solid rgba(30,144,255,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--display); font-size: 13px; font-weight: 700;
+    color: var(--blue-glow);
+    flex-shrink: 0; position: relative; z-index: 1;
+  }
+  .step-content { padding-top: 8px; }
+  .step-title { font-size: 15px; font-weight: 600; color: var(--white); margin-bottom: 6px; }
+  .step-desc { font-size: 13px; color: var(--gray-300); line-height: 1.7; }
+
+  .cipc-box {
+    background: rgba(30,144,255,0.06);
+    border: 1px solid rgba(30,144,255,0.15);
+    border-radius: 12px;
+    padding: 36px;
+  }
+  .cipc-box h3 {
+    font-family: var(--display); font-size: 15px; font-weight: 700;
+    color: var(--cyan); letter-spacing: 1px; margin-bottom: 20px;
+  }
+  .req-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .req-list li {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-size: 13px; color: var(--gray-300); line-height: 1.6;
+  }
+  .req-check {
+    width: 18px; height: 18px; border-radius: 4px;
+    background: rgba(30,144,255,0.15);
+    border: 1px solid rgba(30,144,255,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: var(--blue-glow);
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .intl-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 1px; text-transform: uppercase;
+    color: var(--cyan);
+    margin-top: 20px;
+  }
+
+  /* PRICING */
+  #pricing { background: var(--darker); }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .price-card {
+    background: var(--black);
+    border: 1px solid rgba(30,144,255,0.12);
+    border-radius: 12px;
+    padding: 32px 28px;
+    transition: border-color .3s, transform .3s;
+    position: relative; overflow: hidden;
+  }
+  .price-card:hover { border-color: rgba(30,144,255,0.4); transform: translateY(-4px); }
+  .price-card.featured {
+    border-color: var(--blue-glow);
+    background: rgba(30,144,255,0.05);
+  }
+  .price-card.featured::before {
+    content: 'POPULAR';
+    position: absolute; top: 16px; right: 16px;
+    font-size: 9px; font-weight: 700; letter-spacing: 2px;
+    color: var(--black); background: var(--blue-glow);
+    padding: 3px 8px; border-radius: 3px;
+  }
+  .price-name {
+    font-family: var(--display); font-size: 12px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--blue-300); margin-bottom: 16px;
+  }
+  .price-amount {
+    font-family: var(--display); font-size: 36px; font-weight: 900;
+    color: var(--white); line-height: 1; margin-bottom: 6px;
+  }
+  .price-amount span { font-size: 18px; color: var(--gray-300); }
+  .price-desc { font-size: 13px; color: var(--gray-500); margin-bottom: 24px; }
+  .price-features { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+  .price-features li {
+    display: flex; gap: 10px;
+    font-size: 13px; color: var(--gray-300);
+  }
+  .price-features li::before { content: '→'; color: var(--blue-glow); flex-shrink: 0; }
+  .price-btn {
+    width: 100%;
+    background: transparent;
+    border: 1px solid rgba(30,144,255,0.3);
+    color: var(--blue-300);
+    font-family: var(--body); font-size: 12px; font-weight: 600;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 12px; border-radius: 4px;
+    cursor: pointer; text-decoration: none;
+    display: block; text-align: center;
+    transition: background .2s, color .2s, border-color .2s;
+  }
+  .price-btn:hover, .price-card.featured .price-btn {
+    background: var(--blue-glow); color: var(--black); border-color: var(--blue-glow);
+  }
+
+  /* CONTACT */
+  #contact { background: var(--black); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+  .contact-info { display: flex; flex-direction: column; gap: 24px; }
+  .contact-item {
+    display: flex; align-items: flex-start; gap: 16px;
+    background: rgba(30,144,255,0.05);
+    border: 1px solid rgba(30,144,255,0.1);
+    border-radius: 8px; padding: 20px 24px;
+  }
+  .contact-icon {
+    width: 40px; height: 40px; border-radius: 8px;
+    background: rgba(30,144,255,0.1); border: 1px solid rgba(30,144,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .contact-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-500); margin-bottom: 4px; }
+  .contact-val { font-size: 16px; font-weight: 600; color: var(--white); }
+  .contact-val a { color: var(--blue-300); text-decoration: none; }
+
+  .contact-form { display: flex; flex-direction: column; gap: 16px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+  .form-label { font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gray-500); }
+  .form-input, .form-select, .form-textarea {
+    background: rgba(30,144,255,0.05);
+    border: 1px solid rgba(30,144,255,0.15);
+    border-radius: 4px;
+    padding: 12px 16px;
+    font-family: var(--body); font-size: 14px; color: var(--white);
+    outline: none;
+    transition: border-color .2s;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--blue-glow); }
+  .form-select { appearance: none; cursor: pointer; }
+  .form-select option { background: var(--dark); }
+  .form-textarea { resize: vertical; min-height: 120px; }
+  .form-submit {
+    background: var(--blue-glow); color: var(--black);
+    border: none; border-radius: 4px;
+    font-family: var(--body); font-size: 13px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    padding: 16px; cursor: pointer;
+    transition: box-shadow .2s, transform .2s;
+  }
+  .form-submit:hover { box-shadow: 0 0 30px rgba(30,144,255,0.4); transform: translateY(-1px); }
+
+  /* FOOTER */
+  footer {
+    background: var(--darker);
+    border-top: 1px solid rgba(30,144,255,0.1);
+    padding: 40px 60px;
+    display: flex; justify-content: space-between; align-items: center;
+    position: relative; z-index: 1;
+  }
+  .footer-logo { font-family: var(--display); font-size: 13px; font-weight: 700; letter-spacing: 2px; }
+  .footer-logo span { color: var(--blue-glow); }
+  .footer-text { font-size: 12px; color: var(--gray-500); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-size: 12px; color: var(--gray-500); text-decoration: none; transition: color .2s; }
+  .footer-links a:hover { color: var(--cyan); }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 24px 60px; }
+    section { padding: 60px 24px; }
+    .cipc-grid, .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    .form-row { grid-template-columns: 1fr; }
+    .hero-stats { flex-wrap: wrap; gap: 24px; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+    .ai-banner { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">VISUAL<span>HAND</span></div>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#cipc">CIPC</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get Started</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-orb"></div>
+  <div class="hero-orb-2"></div>
+
+  <div class="hero-badge">
+    <div class="badge-dot"></div>
+    Remote Digital Services · Fully Online
+  </div>
+
+  <h1>Your Business,<br><span class="line2">Handled Digitally.</span></h1>
+
+  <p class="hero-sub">From CIPC company registrations and BEE certificates to website development, poster design, and AI-powered business documents — Visual Hand gets it done remotely, fast, and professionally.</p>
+
+  <div class="hero-btns">
+    <a href="#services" class="btn-primary">Our Services</a>
+    <a href="https://wa.me/27604773630" class="btn-outline" target="_blank">WhatsApp Us</a>
+  </div>
+
+  <div class="hero-stats">
+    <div>
+      <div class="hero-stat-val">100%</div>
+      <div class="hero-stat-label">Online &amp; Remote</div>
+    </div>
+    <div>
+      <div class="hero-stat-val">SA + Intl</div>
+      <div class="hero-stat-label">Director Citizenships</div>
+    </div>
+    <div>
+      <div class="hero-stat-val">Fast</div>
+      <div class="hero-stat-label">Turnaround</div>
+    </div>
+    <div>
+      <div class="hero-stat-val">CIPC</div>
+      <div class="hero-stat-label">Registered Filing</div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-label">What We Do</div>
+  <h2 class="section-title">Full-Stack Digital Services</h2>
+  <p class="section-body">Everything your business needs — delivered remotely. You supply your requirements, we handle the execution from start to finish.</p>
+
+  <div class="ai-banner">
+    <div class="ai-badge">⚡ NEW — AI-Powered</div>
+    <div>
+      <h3>AI Business Document &amp; Content Services</h3>
+      <p>Need a business plan, investor proposal, company profile, marketing copy, or professional emails drafted? Visual Hand now offers AI-powered document creation — fast, polished, and tailored to your business. Share your details and we deliver a professional, ready-to-send document.</p>
+    </div>
+  </div>
+
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">🎨</div>
+      <h3>Poster Design</h3>
+      <p>Professional marketing posters, flyers, and promotional material for your business. Share your brief — we design and deliver digitally, ready to print or share online.</p>
+      <div class="service-price">From R150</div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">🏛️</div>
+      <h3>CIPC &amp; Business Registration</h3>
+      <p>Full company registration handled on your behalf. You provide the required documents — we file everything with CIPC. South African and international directors welcome.</p>
+      <div class="service-price">Contact for quote</div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">🌐</div>
+      <h3>Website Development</h3>
+      <p>Professional websites built for your business — from landing pages to full business sites. Mobile-friendly, fast, and ready to deploy online.</p>
+      <div class="service-price">From R1,000</div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">✅</div>
+      <h3>BEE Certificates</h3>
+      <p>BEE affidavit and certificate assistance for qualifying businesses. Supply your details and we handle the documentation and submission process for you.</p>
+      <div class="service-price">Contact for quote</div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">📄</div>
+      <h3>Business Plans &amp; Proposals</h3>
+      <p>AI-powered, professionally structured business plans, investor proposals, and company profiles. Built from your input — formatted to impress banks, investors, and partners.</p>
+      <div class="service-price">From R500</div>
+    </div>
+
+    <div class="service-card">
+      <div class="service-icon">✉️</div>
+      <h3>Professional Copywriting</h3>
+      <p>Business emails, WhatsApp marketing messages, social media content, tender write-ups, and any professional text your business needs — drafted and polished for you.</p>
+      <div class="service-price">From R200</div>
+    </div>
+  </div>
+</section>
+
+<!-- CIPC -->
+<section id="cipc">
+  <div class="section-label">Company Registration</div>
+  <h2 class="section-title">CIPC Registration — We File For You</h2>
+  <p class="section-body">No back-and-forth guidance. You give us your documents and requirements, we handle the entire CIPC filing process on your behalf — including companies with international directors.</p>
+
+  <div class="cipc-grid">
+    <div>
+      <div style="font-size:13px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--gray-500); margin-bottom:24px;">How It Works</div>
+      <div class="cipc-steps">
+        <div class="cipc-step">
+          <div class="step-num">01</div>
+          <div class="step-content">
+            <div class="step-title">You Send Your Requirements</div>
+            <div class="step-desc">Tell us the company name, structure, and director details. We confirm what documents we need from you via WhatsApp or email.</div>
+          </div>
+        </div>
+        <div class="cipc-step">
+          <div class="step-num">02</div>
+          <div class="step-content">
+            <div class="step-title">You Supply the Documents</div>
+            <div class="step-desc">Send us certified IDs, passport copies for international directors, proof of address, and any other required documentation.</div>
+          </div>
+        </div>
+        <div class="cipc-step">
+          <div class="step-num">03</div>
+          <div class="step-content">
+            <div class="step-title">We Build &amp; File with CIPC</div>
+            <div class="step-desc">We prepare and submit your complete registration application directly with CIPC. You don't need to touch the CIPC system at all.</div>
+          </div>
+        </div>
+        <div class="cipc-step">
+          <div class="step-num">04</div>
+          <div class="step-content">
+            <div class="step-title">You Receive Your Certificate</div>
+            <div class="step-desc">Once approved by CIPC, we deliver your company registration certificate and documents digitally — straight to your inbox.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="cipc-box">
+        <h3>Documents We Typically Need</h3>
+        <ul class="req-list">
+          <li><div class="req-check">✓</div>Certified copy of SA ID or passport (all directors)</li>
+          <li><div class="req-check">✓</div>Proof of residential address (not older than 3 months)</li>
+          <li><div class="req-check">✓</div>Proposed company name (we check availability)</li>
+          <li><div class="req-check">✓</div>Company type (Pty Ltd, NPC, etc.)</li>
+          <li><div class="req-check">✓</div>Director shareholding split (if multiple directors)</li>
+          <li><div class="req-check">✓</div>Business activity description</li>
+          <li><div class="req-check">✓</div>Contact details of all directors</li>
+        </ul>
+        <div class="intl-badge">🌍 International directors accepted</div>
+        <p style="font-size:13px; color:var(--gray-500); margin-top:12px; line-height:1.6;">Companies with directors holding foreign citizenship or passports are fully supported. Additional documentation may apply depending on the director's country of origin.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-label">Investment</div>
+  <h2 class="section-title">Simple, Transparent Pricing</h2>
+  <p class="section-body">No hidden fees. You know what you're paying before we start. Contact us for a custom quote on larger projects.</p>
+
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="price-name">Poster Design</div>
+      <div class="price-amount"><span>R</span>150+</div>
+      <div class="price-desc">Per poster design</div>
+      <ul class="price-features">
+        <li>Professional graphic design</li>
+        <li>Your branding &amp; colors</li>
+        <li>Print &amp; digital ready</li>
+        <li>Revisions included</li>
+      </ul>
+      <a href="#contact" class="price-btn">Order Now</a>
+    </div>
+
+    <div class="price-card featured">
+      <div class="price-name">Business Registration</div>
+      <div class="price-amount"><span>R</span>500+</div>
+      <div class="price-desc">Full CIPC filing service</div>
+      <ul class="price-features">
+        <li>Complete CIPC filing</li>
+        <li>SA &amp; international directors</li>
+        <li>Name availability check</li>
+        <li>Certificate delivered digitally</li>
+        <li>All document preparation</li>
+      </ul>
+      <a href="#contact" class="price-btn">Get Started</a>
+    </div>
+
+    <div class="price-card">
+      <div class="price-name">Website Development</div>
+      <div class="price-amount"><span>R</span>1,000+</div>
+      <div class="price-desc">Per website project</div>
+      <ul class="price-features">
+        <li>Mobile-friendly design</li>
+        <li>Professional layout</li>
+        <li>Contact &amp; services pages</li>
+        <li>Ready to deploy</li>
+      </ul>
+      <a href="#contact" class="price-btn">Enquire</a>
+    </div>
+
+    <div class="price-card">
+      <div class="price-name">Business Plan / Proposal</div>
+      <div class="price-amount"><span>R</span>500+</div>
+      <div class="price-desc">AI-powered, professionally formatted</div>
+      <ul class="price-features">
+        <li>Full business plan document</li>
+        <li>Investor / bank ready</li>
+        <li>Company profile included</li>
+        <li>Fast turnaround</li>
+      </ul>
+      <a href="#contact" class="price-btn">Order Now</a>
+    </div>
+
+    <div class="price-card">
+      <div class="price-name">BEE Certificate</div>
+      <div class="price-amount"><span>R</span>350+</div>
+      <div class="price-desc">Affidavit &amp; certificate assistance</div>
+      <ul class="price-features">
+        <li>BEE level assessment</li>
+        <li>Affidavit preparation</li>
+        <li>Certificate documentation</li>
+        <li>Submission handled</li>
+      </ul>
+      <a href="#contact" class="price-btn">Enquire</a>
+    </div>
+
+    <div class="price-card">
+      <div class="price-name">Copywriting &amp; Docs</div>
+      <div class="price-amount"><span>R</span>200+</div>
+      <div class="price-desc">Per document or campaign</div>
+      <ul class="price-features">
+        <li>Business emails &amp; letters</li>
+        <li>WhatsApp marketing copy</li>
+        <li>Social media content</li>
+        <li>Tender write-ups</li>
+      </ul>
+      <a href="#contact" class="price-btn">Order Now</a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">Get In Touch</div>
+  <h2 class="section-title">Ready to Get Started?</h2>
+  <p class="section-body">Send us your requirements and we'll get back to you with exactly what we need to begin. All services delivered remotely — anywhere in South Africa.</p>
+
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div class="contact-item">
+        <div class="contact-icon">📱</div>
+        <div>
+          <div class="contact-label">WhatsApp / Call</div>
+          <div class="contact-val"><a href="https://wa.me/27604773630">060 477 3630</a></div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">✉️</div>
+        <div>
+          <div class="contact-label">Email</div>
+          <div class="contact-val"><a href="mailto:mjasti37@gmail.com">mjasti37@gmail.com</a></div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🌐</div>
+        <div>
+          <div class="contact-label">Service Mode</div>
+          <div class="contact-val">100% Remote · Fully Online</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">🌍</div>
+        <div>
+          <div class="contact-label">Coverage</div>
+          <div class="contact-val">South Africa · International Directors</div>
+        </div>
+      </div>
+
+      <a href="https://wa.me/27604773630?text=Hi%20Visual%20Hand%2C%20I%20need%20help%20with%20" target="_blank" class="btn-primary" style="text-align:center; margin-top:8px;">
+        💬 WhatsApp Us Now
+      </a>
+    </div>
+
+    <div class="contact-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Your Name</label>
+          <input class="form-input" type="text" placeholder="Full name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone / WhatsApp</label>
+          <input class="form-input" type="tel" placeholder="Your number">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Service Required</label>
+        <select class="form-select">
+          <option value="">Select a service...</option>
+          <option>CIPC &amp; Business Registration</option>
+          <option>Poster Design</option>
+          <option>Website Development</option>
+          <option>BEE Certificate</option>
+          <option>Business Plan / Proposal</option>
+          <option>Copywriting &amp; Documents</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Your Requirements</label>
+        <textarea class="form-textarea" placeholder="Describe what you need — the more detail, the better we can help..."></textarea>
+      </div>
+      <button class="form-submit" onclick="submitForm()">Send Requirements →</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">VISUAL<span>HAND</span> (PTY) LTD</div>
+    <div class="footer-text" style="margin-top:6px;">Remote Digital Services · mjasti37@gmail.com · 060 477 3630</div>
+  </div>
+  <div class="footer-links">
+    <a href="#services">Services</a>
+    <a href="#cipc">CIPC</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#contact">Contact</a>
+  </div>
+</footer>
+
+<script>
+  function submitForm() {
+    const name = document.querySelector('input[placeholder="Full name"]').value;
+    const phone = document.querySelector('input[placeholder="Your number"]').value;
+    const service = document.querySelector('.form-select').value;
+    const requirements = document.querySelector('.form-textarea').value;
+    if (!name || !service) { alert('Please fill in your name and select a service.'); return; }
+    const msg = `Hi Visual Hand! My name is ${name}. I need help with: ${service}. ${requirements ? 'Details: ' + requirements : ''} My number: ${phone}`;
+    window.open(`https://wa.me/27604773630?text=${encodeURIComponent(msg)}`, '_blank');
+  }
+
+  // Smooth nav active state
+  const navLinks = document.querySelectorAll('.nav-links a');
+  const sections = document.querySelectorAll('section[id]');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        navLinks.forEach(a => a.style.color = '');
+        const link = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
+        if (link) link.style.color = 'var(--cyan)';
+      }
+    });
+  }, { threshold: 0.4 });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
